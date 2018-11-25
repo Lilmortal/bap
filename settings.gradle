@@ -1,4 +1,5 @@
 rootProject.name = 'bap'
 include 'user'
 include 'chat'
+include 'dota'
 
