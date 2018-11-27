@@ -12,3 +12,12 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+task user {
+    println "All user"
+}
+
+task run {
+    dependsOn user
+    println "All"
+}
