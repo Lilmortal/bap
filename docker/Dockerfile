@@ -8,8 +8,8 @@ WORKDIR /app
 
 USER root
 RUN chown -R gradle /app
-USER gradle
-
 COPY . /app
 
-RUN gradle build
+USER gradle
+
+ENTRYPOINT ["gradle", "build"]
