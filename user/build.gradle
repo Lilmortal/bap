@@ -1,3 +1,34 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id "org.springframework.boot" version "2.1.0.RELEASE"
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+}
+
+group 'bap'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    junitVersion = '4.12'
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    testImplementation "junit:junit:${junitVersion}"
+}
+
+task run {
+    println "User"
+}
+
+
+subprojects {
+    version = '1.0'
+}
+
 springBoot {
     mainClassName = "bap.user.BapUserApplication"
 }

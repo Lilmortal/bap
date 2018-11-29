@@ -1,4 +1,9 @@
 rootProject.name = 'bap'
+
+file('modules').listFiles().each {
+    File moduleBuild -> includeBuild moduleBuild
+}
+
 include 'user'
 include 'chat'
 include 'dota'
