@@ -1,8 +1,8 @@
 plugins {
     id 'java'
     id 'idea'
-    id "org.springframework.boot" version "2.1.0.RELEASE"
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
+
 }
 
 group 'bap'
@@ -12,23 +12,29 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 ext {
+    sparkJavaVersion = '2.8.0'
+    jacksonVersion = '2.9.7'
+
+    log4j12Version = '1.7.25'
     junitVersion = '4.12'
+
+    mainClassName = "bap.user.BapUserApplication"
 }
 
 dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "com.sparkjava:spark-core:${sparkJavaVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
+
+    testImplementation "org.slf4j:slf4j-log4j12:${log4j12Version}"
     testImplementation "junit:junit:${junitVersion}"
 }
 
-task run {
-    println "User"
-}
+task run(type: JavaExec) {
+    dependsOn shadowJar
 
+    println "Running user service..."
 
-subprojects {
-    version = '1.0'
-}
-
-springBoot {
-    mainClassName = "bap.user.BapUserApplication"
+    classpath = sourceSets.main.runtimeClasspath
+    main = "${mainClassName}"
 }

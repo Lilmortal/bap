@@ -1,0 +1,14 @@
+package bap.user.services;
+
+import bap.user.api.UserDto;
+import bap.user.dao.User;
+
+public interface UserService {
+    UserDto getUser(UserDto user);
+
+    void createUser(User user) throws InvalidUserException;
+
+    void updateUser(User user) throws InvalidUserException;
+
+    void deleteUser(User user);
+}

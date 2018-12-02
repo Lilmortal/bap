@@ -1,4 +1,4 @@
-FROM gradle:5.0.0-jdk8-alpine
+FROM gradle:4.9.0-jdk8-alpine
 
 LABEL version="1.0"
 LABEL description="This runs the entire bap microservices"
@@ -12,4 +12,4 @@ COPY . /app
 
 USER gradle
 
-ENTRYPOINT ["gradle", "build"]
+ENTRYPOINT ["gradle", "run"]
