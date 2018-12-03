@@ -2,12 +2,14 @@ package bap.user.dao;
 
 import bap.user.api.UserDto;
 
+import java.sql.SQLException;
+
 public interface UserDao {
-    UserDto getUser(User user);
+    UserDto getUser(User user) throws SQLException;
 
-    void createUser(User user);
+    void createUser(User user) throws SQLException;
 
-    void updateUser(User user);
+    void updateUser(User user) throws SQLException;
 
-    void deleteUser(User user);
+    void deleteUser(User user) throws SQLException;
 }

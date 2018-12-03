@@ -14,6 +14,7 @@ targetCompatibility = 1.8
 ext {
     sparkJavaVersion = '2.8.0'
     jacksonVersion = '2.9.7'
+    postgreSqlVersion = '42.2.5'
 
     log4j12Version = '1.7.25'
     junitVersion = '4.12'
@@ -24,6 +25,7 @@ ext {
 dependencies {
     implementation "com.sparkjava:spark-core:${sparkJavaVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "org.postgresql:postgresql:${postgreSqlVersion}"
 
 
     testImplementation "org.slf4j:slf4j-log4j12:${log4j12Version}"
