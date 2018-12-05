@@ -2,12 +2,15 @@ version: '3'
 
 services:
   user_service:
-    build: .
+    image: user_service:1.0
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
     ports:
       - 8080:80
-    depends_on:
-      - user_db
-  user_db:
-    image: postgres:latest
+#    depends_on:
+#      - user_db
+#  user_db:
+#    image: postgres:latest
 
 

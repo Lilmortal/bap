@@ -12,4 +12,4 @@ COPY . /app
 
 USER gradle
 
-ENTRYPOINT ["gradle", "build"]
+ENTRYPOINT ["gradle", "run"]

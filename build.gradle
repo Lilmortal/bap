@@ -13,3 +13,7 @@ allprojects {
         implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     }
 }
+
+task run {
+    println "test"
+}
