@@ -22,6 +22,7 @@ public class UserApiImpl implements UserApi {
 
     @Override
     public UserDto getUser(Request req, Response res) {
+        LOG.info("TET");
         UserDto user = new UserDto(new DotaId(req.params(":id")), new Username(req.params(":username")));
         return userService.getUser(user);
     }
