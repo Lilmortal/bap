@@ -2,9 +2,15 @@ allprojects {
     apply plugin: 'java'
 
     repositories {
-        mavenCentral()
+        jcenter()
     }
+}
 
+task run {
+    println "test"
+}
+
+subprojects {
     ext {
         log4jVersion = '2.11.1'
     }
@@ -12,8 +18,4 @@ allprojects {
     dependencies {
         implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     }
-}
-
-task run {
-    println "test"
 }

@@ -1,6 +1,7 @@
 package bap.user;
 
 import bap.user.api.UserApiImpl;
+import spark.Filter;
 
 import static spark.Spark.*;
 
@@ -16,8 +17,19 @@ public class UserController {
     }
 
     public void start() {
+        after((Filter) (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Methods", "GET");
+        });
+
+        path("/healthcheck", () -> {
+            get("/", (req, res) -> "TEST");
+        });
+
         path("/api/", () -> {
             path("/v1", () -> {
+
+
                 get(USER_API_ROOT + "/dotaId/:id", userApiImpl::getUser);
 
                 get(USER_API_ROOT + "/username/:username", userApiImpl::getUser);

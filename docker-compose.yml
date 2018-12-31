@@ -4,10 +4,10 @@ services:
   user_service:
     image: user_service:1.0
     build:
-      context: ../
-      dockerfile: ./docker/Dockerfile
+      context: .
+      dockerfile: ./bap-user/Dockerfile
     ports:
-      - 8080:80
+      - "4567:8080"
 #    depends_on:
 #      - user_db
 #  user_db:
