@@ -1,8 +1,7 @@
 version: '3'
 
 volumes:
-  user_data:
-    driver: local
+  pgadmin:
 
 services:
   user_service:
@@ -14,6 +13,7 @@ services:
       - "8080:4567"
     depends_on:
       - user_db
+
   user_db:
     build:
       context: ./bap-user/database
@@ -21,8 +21,20 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=user
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - user_db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: pwdpwd
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - "5050:80"
 
 
