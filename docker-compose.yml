@@ -20,8 +20,6 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "5432:5432"
-    volumes:
-      - ./bap-user/database/setup.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password

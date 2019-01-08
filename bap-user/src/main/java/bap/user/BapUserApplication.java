@@ -21,6 +21,12 @@ public class BapUserApplication {
 
     private static final String USER_DB_PROPERTIES = "/user_db.properties";
 
+    private static final String USER_DB_URL_KEY = "url";
+
+    private static final String USER_DB_USER_KEY = "user";
+
+    private static final String USER_DB_PASSWORD_KEY = "password";
+
     private void init() {
         UserDao userDao = null;
         Properties prop = new Properties();
@@ -29,7 +35,7 @@ public class BapUserApplication {
             InputStream file = getClass().getResourceAsStream(USER_DB_PROPERTIES);
 
             prop.load(file);
-            userDao = new UserDaoImpl(prop.getProperty("url"), prop.getProperty("user"), prop.getProperty("password"));
+            userDao = new UserDaoImpl(prop.getProperty(USER_DB_URL_KEY), prop.getProperty(USER_DB_USER_KEY), prop.getProperty(USER_DB_PASSWORD_KEY));
         } catch (SQLException e) {
             LOG.error("Failed to connect to database. SQL State: " + e.getSQLState());
         } catch (FileNotFoundException e) {

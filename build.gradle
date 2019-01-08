@@ -6,10 +6,6 @@ allprojects {
     }
 }
 
-task run {
-    println "test"
-}
-
 subprojects {
     ext {
         log4jVersion = '2.11.1'

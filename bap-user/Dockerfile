@@ -4,15 +4,16 @@ LABEL version="1.0"
 LABEL description="This runs the entire bap microservices"
 LABEL maintainer="jacktan165@gmail.com"
 
-WORKDIR /src
+ENV GRADLE_USER_HOME /tmp
 
-USER root
-RUN chown -R gradle /src
+WORKDIR /src
 
 COPY build.gradle /src
 COPY settings.gradle /src
 COPY ./bap-user /src/bap-user
 
-# USER gradle
+USER root
+RUN chown -R gradle /src
+USER gradle
 
 ENTRYPOINT ["gradle", ":bap-user:run"]
