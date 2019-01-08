@@ -21,10 +21,9 @@ public class UserApiImpl implements UserApi {
     }
 
     @Override
-    public UserDto getUser(Request req, Response res) {
-        LOG.info("TET");
+    public String getUsers(Request req, Response res) {
         UserDto user = new UserDto(new DotaId(req.params(":id")), new Username(req.params(":username")));
-        return userService.getUser(user);
+        return userService.getUsers(user);
     }
 
     @Override
@@ -39,8 +38,7 @@ public class UserApiImpl implements UserApi {
             LOG.error("Failed to deserialize user when attempting to create a user.");
             LOG.error(e.getMessage());
         } catch (InvalidUserException e) {
-            LOG.warn("User " + user.getUsername() + " is invalid.");
-            LOG.warn(e.getMessage());
+            LOG.warn("User " + user.getUsername().orElse("Unknown") + " is invalid.");
         }
         return "User created.";
 

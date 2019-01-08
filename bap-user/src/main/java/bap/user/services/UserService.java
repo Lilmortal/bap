@@ -4,7 +4,7 @@ import bap.user.api.UserDto;
 import bap.user.dao.User;
 
 public interface UserService {
-    UserDto getUser(UserDto user);
+    String getUsers(UserDto user);
 
     void createUser(User user) throws InvalidUserException;
 

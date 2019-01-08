@@ -3,10 +3,16 @@ package bap.user.dao;
 import bap.user.api.DotaId;
 import bap.user.api.UserDto;
 import bap.user.api.Username;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDaoImpl implements UserDao {
+    public final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
     private Connection connection;
 
     public UserDaoImpl(String url, String user, String pw) throws SQLException {
@@ -14,74 +20,69 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserDto getUser(User user) throws SQLException {
-        PreparedStatement getUserStmt = connection.prepareStatement(
-                "SELECT id, dota_id, username, password, showDotaMatches " +
-                "FROM users WHERE " +
-                "id = ? AND" +
-                "dota_id = ? AND " +
-                "username = ? AND " +
-                "password = ? AND " +
-                "showDotaMatches = ?");
+    public List<User> getUsers(User user) throws SQLException {
+        UserQuery userSelectBuilder = new UserQueryFactory(connection).select(new String[]{"id", "dotaid", "username", "password", "showdotamatches"});
+        ResultSet result = userSelectBuilder
+                .withId(user.getId())
+                .withDotaId(user.getDotaId())
+                .withUsername(user.getUsername())
+                .withPassword(user.getPassword())
+                .withShowDotaMatches(user.getShowDotaMatches())
+                .execute();
 
-        getUserStmt.setString(1, user.getId());
-        getUserStmt.setString(2, user.getDotaId());
-        getUserStmt.setString(3, user.getUsername());
-        getUserStmt.setString(4, user.getPassword());
-        getUserStmt.setBoolean(5, user.isShowDotaMatches());
+        List<User> users = new ArrayList<>();
+        while (result.next()) {
+            User retrievedUser = new User(result.getString("id"), result.getString("dotaid"),
+                    result.getString("username"), null, result.getBoolean("showdotamatches"));
 
-        ResultSet result = getUserStmt.executeQuery();
-        if (!result.next()) {
-            return null;
+            users.add(retrievedUser);
         }
 
-        UserDto userDto = new UserDto(new DotaId(result.getString("dota_id")),
-                new Username(result.getString("username")));
-
-        return userDto;
+        return users;
     }
 
     @Override
     public void createUser(User user) throws SQLException {
-        PreparedStatement createUserStmt = connection.prepareStatement(
-                "INSERT INTO user(id, dota_id, username, password, showDotaMatches) " +
-                "VALUES (?, ?, ?)");
+        UserQuery userInsertBuilder = new UserQueryFactory(connection).insert();
+        ResultSet result = userInsertBuilder
+                .withId(user.getId())
+                .withDotaId(user.getDotaId())
+                .withUsername(user.getUsername())
+                .withPassword(user.getPassword())
+                .withShowDotaMatches(user.getShowDotaMatches())
+                .execute();
 
-        createUserStmt.setString(1, user.getId());
-        createUserStmt.setString(2, user.getDotaId());
-        createUserStmt.setString(3, user.getUsername());
-        createUserStmt.setString(4, user.getPassword());
-        createUserStmt.setBoolean(5, user.isShowDotaMatches());
-
-        createUserStmt.executeUpdate();
+        if (result.next()) {
+            LOG.info("User created.");
+        }
     }
 
     @Override
     public void updateUser(User user) throws SQLException {
-        PreparedStatement createUserStmt = connection.prepareStatement(
-                "UPDATE user SET dota_id = ?, username = ?, password = ?, showDotaMatches = ? " +
-                        "WHERE id = ?");
-
-        createUserStmt.setString(1, user.getDotaId());
-        createUserStmt.setString(2, user.getUsername());
-        createUserStmt.setString(3, user.getPassword());
-        createUserStmt.setBoolean(4, user.isShowDotaMatches());
-        createUserStmt.setString(5, user.getId());
-
-        createUserStmt.executeUpdate();
+//        PreparedStatement createUserStmt = connection.prepareStatement(
+//                "UPDATE user SET dota_id = ?, username = ?, password = ?, showDotaMatches = ? " +
+//                        "WHERE id = ?");
+//
+//        createUserStmt.setString(1, user.getDotaId());
+//        createUserStmt.setString(2, user.getUsername());
+//        createUserStmt.setString(3, user.getPassword());
+//        createUserStmt.setBoolean(4, user.getShowDotaMatches());
+//        createUserStmt.setString(5, user.getId());
+//
+//        createUserStmt.executeUpdate();
     }
 
     @Override
     public void deleteUser(User user) throws SQLException {
-        PreparedStatement createUserStmt = connection.prepareStatement(
-                "DELETE FROM user WHERE id = ?, dota_id = ?, username = ?, password = ?, showDotaMatches = ?");
-
-        createUserStmt.setString(1, user.getId());
-        createUserStmt.setString(2, user.getDotaId());
-        createUserStmt.setString(3, user.getUsername());
-        createUserStmt.setString(4, user.getPassword());
-        createUserStmt.setBoolean(5, user.isShowDotaMatches());
-
-        createUserStmt.executeUpdate();
+//        PreparedStatement createUserStmt = connection.prepareStatement(
+//                "DELETE FROM user WHERE id = ?, dota_id = ?, username = ?, password = ?, showDotaMatches = ?");
+//
+//        createUserStmt.setString(1, user.getId());
+//        createUserStmt.setString(2, user.getDotaId());
+//        createUserStmt.setString(3, user.getUsername());
+//        createUserStmt.setString(4, user.getPassword());
+//        createUserStmt.setBoolean(5, user.getShowDotaMatches());
+//
+//        createUserStmt.executeUpdate();
     }
 }

@@ -1,5 +1,7 @@
 package bap.user.dao;
 
+import java.util.Optional;
+
 public class User {
     private String id;
 
@@ -9,17 +11,20 @@ public class User {
 
     private String password;
 
-    private boolean showDotaMatches;
+    private Boolean showDotaMatches;
+
+    public User() {
+    }
 
     public User(String dotaId, String username) {
-        this(null, dotaId, username, null, true);
+        this(null, dotaId, username, null, null);
     }
 
     public User(String dotaId, String username, String password) {
-        this(null, dotaId, username, password, true);
+        this(null, dotaId, username, password, null);
     }
 
-    public User(String id, String dotaId, String username, String password, boolean showDotaMatches) {
+    public User(String id, String dotaId, String username, String password, Boolean showDotaMatches) {
         this.id = id;
         this.dotaId = dotaId;
         this.username = username;
@@ -27,23 +32,33 @@ public class User {
         this.showDotaMatches = showDotaMatches;
     }
 
-    public String getId() {
-        return id;
+    public Optional<String> getId() {
+        return Optional.ofNullable(id);
     }
 
-    public String getDotaId() {
-        return dotaId;
+    public Optional<String> getDotaId() {
+        return Optional.ofNullable(dotaId);
     }
 
-    public String getUsername() {
-        return username;
+    public Optional<String> getUsername() {
+        return Optional.ofNullable(username);
     }
 
-    public String getPassword() {
-        return password;
+    public Optional<String> getPassword() {
+        return Optional.ofNullable(password);
     }
 
-    public boolean isShowDotaMatches() {
-        return showDotaMatches;
+    public Optional<Boolean> getShowDotaMatches() {
+        return Optional.ofNullable(showDotaMatches);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + id + '\'' +
+                ", dotaId='" + dotaId + '\'' +
+                ", username='" + username + '\'' +
+                ", showDotaMatches=" + showDotaMatches +
+                '}';
     }
 }

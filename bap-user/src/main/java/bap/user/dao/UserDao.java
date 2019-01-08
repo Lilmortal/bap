@@ -3,9 +3,10 @@ package bap.user.dao;
 import bap.user.api.UserDto;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface UserDao {
-    UserDto getUser(User user) throws SQLException;
+    List<User> getUsers(User user) throws SQLException;
 
     void createUser(User user) throws SQLException;
 

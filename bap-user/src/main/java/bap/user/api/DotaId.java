@@ -7,7 +7,11 @@ public class DotaId {
         this.dotaId = dotaId;
     }
 
-    public String get() {
+    public String getDotaId() {
         return dotaId;
+    }
+
+    public void setDotaId(String dotaId) {
+        this.dotaId = dotaId;
     }
 }

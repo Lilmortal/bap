@@ -4,7 +4,7 @@ import spark.Request;
 import spark.Response;
 
 public interface UserApi {
-    UserDto getUser(Request req, Response res);
+    String getUsers(Request req, Response res);
 
     String createUser(Request req, Response res);
 

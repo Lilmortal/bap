@@ -22,16 +22,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(UserDto userDto) {
-        User user = new User(userDto.getDotaId().get(), userDto.getUsername().get());
+    public String getUsers(UserDto userDto) {
+        User user = new User(userDto.getDotaId().orElse(null), userDto.getUsername().orElse(null));
         try {
-            return userDao.getUser(user);
+            return userDao.getUsers(user).toString();
         } catch (SQLException e) {
-            LOG.error("Failed to get " + userDto.getUsername() + ".");
-            LOG.error(e.getSQLState());
+            LOG.error("Failed to get user. SQL State: " + e.getSQLState());
         }
 
-        return null;
+        return "Could not retrieve any user.";
     }
 
     @Override
@@ -40,8 +39,7 @@ public class UserServiceImpl implements UserService {
             try {
                 userDao.createUser(user);
             } catch (SQLException e) {
-                LOG.error("Failed to create " + user.getUsername() + ".");
-                LOG.error(e.getSQLState());
+                LOG.error("Failed to create " + user.getUsername().get() + ". SQL State: " + e.getSQLState());
             }
         } else {
             throw new InvalidUserException();
@@ -54,8 +52,7 @@ public class UserServiceImpl implements UserService {
             try {
                 userDao.updateUser(user);
             } catch (SQLException e) {
-                LOG.error("Failed to update " + user.getUsername() + ".");
-                LOG.error(e.getSQLState());
+                LOG.error("Failed to update " + user.getUsername().get() + ". SQL State: " + e.getSQLState());
             }
         } else {
             throw new InvalidUserException();
@@ -67,12 +64,11 @@ public class UserServiceImpl implements UserService {
         try {
             userDao.deleteUser(user);
         } catch (SQLException e) {
-            LOG.error("Failed to delete " + user.getUsername() + ".");
-            LOG.error(e.getSQLState());
+            LOG.error("Failed to delete " + user.getUsername().get() + ". SQL State: " + e.getSQLState());
         }
     }
 
     private boolean isValid(User user) {
-        return VALID_USERS_REGEX.matches(user.getUsername()) && VALID_PASSWORD_REGEX.matches(user.getPassword());
+        return user.getUsername().get().matches(VALID_USERS_REGEX) && user.getPassword().get().matches(VALID_PASSWORD_REGEX);
     }
 }

@@ -1,5 +1,9 @@
 version: '3'
 
+volumes:
+  user_data:
+    driver: local
+
 services:
   user_service:
     image: user_service:1.0
@@ -7,10 +11,20 @@ services:
       context: .
       dockerfile: ./bap-user/Dockerfile
     ports:
-      - "4567:8080"
-#    depends_on:
-#      - user_db
-#  user_db:
-#    image: postgres:latest
+      - "8080:4567"
+    depends_on:
+      - user_db
+  user_db:
+    build:
+      context: ./bap-user/database
+      dockerfile: ./Dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./bap-user/database/setup.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=user
 
 

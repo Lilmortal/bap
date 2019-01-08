@@ -15,6 +15,4 @@ COPY ./bap-user /src/bap-user
 
 # USER gradle
 
-EXPOSE 4567
-
 ENTRYPOINT ["gradle", ":bap-user:run"]
