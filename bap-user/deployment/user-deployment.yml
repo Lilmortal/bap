@@ -1,0 +1,30 @@
+# This tells kubernetes which type should deployment handle, in this case it is ReplicaSet.
+# https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-apiversion-definition-guide.html
+apiVersion: extensions/v1beta1
+# This tells kubernetes this is a Deployment type
+kind: Deployment
+metadata:
+  # The name of this deployment
+  name: user-deployment
+spec:
+  # Replicate 3 pods
+  replicas: 3
+  selector:
+    matchLabels:
+      # match all the pods that have this name (metadata.labels.app)
+      app: user-service
+  # Anything in template field is relative to the pods.
+  template:
+    metadata:
+      labels:
+        # pod label name, this can seen via kubectl get pods --show-labels
+        app: user-service
+    spec:
+      containers:
+      # Container name
+      - name: user-service
+        image: "user_service:1.0"
+        ports:
+          - name: userservice
+            containerPort: 4567
+
