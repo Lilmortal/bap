@@ -16,6 +16,7 @@ public class UserDaoImpl implements UserDao {
     private Connection connection;
 
     public UserDaoImpl(String url, String user, String pw) throws SQLException {
+        LOG.info(url + " " + user + " " + pw);
         connection = DriverManager.getConnection(url, user, pw);
     }
 

@@ -1,0 +1,54 @@
+# This tells kubernetes which type should deployment handle, in this case it is ReplicaSet.
+# https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-apiversion-definition-guide.html
+apiVersion: extensions/v1beta1
+# This tells kubernetes this is a Deployment type
+kind: Deployment
+metadata:
+  # The name of this deployment
+  name: user-db-deployment
+spec:
+  # Replicate 3 pods
+  replicas: 3
+  selector:
+    matchLabels:
+      # match all the pods that have this name (metadata.labels.app)
+      app: user-db
+  # Anything in template field is relative to the pods.
+  template:
+    metadata:
+      labels:
+        # pod label name, this can seen via kubectl get pods --show-labels
+        app: user-db
+    spec:
+      containers:
+      # Container name
+      - name: user-db
+        image: "user_db:1.0"
+        ports:
+          - name: user-db
+            containerPort: 5432
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: user-db-config-map
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: user-db-config-map
+                key: POSTGRES_PASSWORD
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: user-db-config-map
+                key: POSTGRES_DB
+        volumeMounts:
+          - name: user-db-storage
+            # This is where it is stored inside the container
+            mountPath: /var/lib/postgresql/db-data
+      volumes:
+      - name: user-db-storage
+        persistentVolumeClaim:
+          claimName: user-db-pv-claim
+

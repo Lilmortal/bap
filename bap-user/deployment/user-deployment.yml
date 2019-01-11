@@ -25,6 +25,6 @@ spec:
       - name: user-service
         image: "user_service:1.0"
         ports:
-          - name: userservice
+          - name: user
             containerPort: 4567
 
