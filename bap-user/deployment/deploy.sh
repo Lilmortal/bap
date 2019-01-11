@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# docker-compose up -d --build
+docker-compose up -d --build
 
 kubectl apply -f user-db-config-map.yml --record
 kubectl apply -f user-db-volume-claim.yml --record
@@ -19,9 +19,11 @@ URL=$(minikube service user-service --url)
 echo "$URL"
 
 # getopts is an utility that allows you to add parameters (e.g. -v).
-while getopts ":v:b" opt; do
+while getopts ":vb" opt; do
     case $opt in
-        v)
+        (v)
+            echo "Creating new user..."
+
             RESPONSE=$(curl -d '{"id":"1", "dotaId":"2", "username":"testaaa", "password": "papapapapa13", "showDotaMatches": false}' \
             -H "Content-Type: application/json" -X POST http://192.168.99.104:31675/api/v1/user)
 
@@ -32,13 +34,13 @@ while getopts ":v:b" opt; do
                 kubectl logs ${FIRSTPOD}
             fi
             ;;
-        b)
+        (b)
             if which open > /dev/null
                 then
                   open "${URL}/healthcheck"
                 fi
             ;;
-        \?)
+        (\?)
             echo "Invalid option: -$OPTARG."
             echo "-v: Test if postgresql database is up."
             echo "-b: Open healthcheck with browser."
