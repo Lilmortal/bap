@@ -20,27 +20,27 @@ docker-compose up -d --build
 echo ""
 
 echo "Replacing user-deployment..."
-kubectl apply -f user-deployment.yml
+kubectl apply -f --force user-deployment.yml
 echo ""
 
 echo "Replacing user-db-deployment..."
-kubectl apply -f user-db-deployment.yml
+kubectl apply -f --force user-db-deployment.yml
 echo ""
 
 echo "Replacing user-db-config-map..."
-kubectl apply -f user-db-config-map.yml
+kubectl apply -f --force user-db-config-map.yml
 echo ""
 
 echo "Replacing user-service..."
-kubectl apply -f user-service.yml
+kubectl apply -f --force user-service.yml
 echo ""
 
 echo "Replacing user-db-service..."
-kubectl apply -f user-db-service.yml
+kubectl apply -f --force user-db-service.yml
 echo ""
 
 echo "Replacing user-db-volume-claim..."
-kubectl apply -f user-db-volume-claim.yml
+kubectl apply -f --force user-db-volume-claim.yml
 echo ""
 
 echo "Deployment"
@@ -64,10 +64,12 @@ echo "User service URL"
 echo "$URL"
 echo ""
 
-while STATUS=$(curl -Is http://192.168.99.109:31151/healthcheck | head -n 1) && [[ "$STATUS" != *"200"* ]]; do
-    echo "$STATUS"
-    echo "${URL}/healthcheck is not returning 200... reattempting to retry in 3 seconds..."
-    sleep 3s
+RETRIES_MS=10
+while STATUS=$(curl -Is ${URL}/healthcheck | head -n 1) && [[ "$STATUS" != *"200"* ]]; do
+    # Seems like ${STATUS} returns nothing
+#    echo "${STATUS}"
+    echo "${URL}/healthcheck is not returning 200... reattempting to retry in ${RETRIES_MS} seconds..."
+    sleep "${RETRIES_MS}s"
 done
 
 # getopts is an utility that allows you to add parameters (e.g. -v).

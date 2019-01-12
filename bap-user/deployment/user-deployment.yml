@@ -23,7 +23,8 @@ spec:
       containers:
       # Container name
       - name: user-service
-        image: "user_service:1.0"
+        image: "user_service:1.2"
+        imagePullPolicy: "Always"
         ports:
           - name: user
             containerPort: 4567

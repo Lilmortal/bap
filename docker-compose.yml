@@ -5,7 +5,7 @@ volumes:
 
 services:
   user_service:
-    image: user_service:1.0
+    image: user_service:1.2
     build:
       context: .
       dockerfile: ./bap-user/Dockerfile
@@ -15,13 +15,14 @@ services:
       - user_db
 
   user_db:
-    image: user_db:1.0
+    image: user_db:1.2
     build:
       context: ./bap-user/database
       dockerfile: ./Dockerfile
     ports:
       - "5432:5432"
     environment:
+      # only needed to login via pgadmin for example
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: user
