@@ -64,7 +64,8 @@ echo "User service URL"
 echo "$URL"
 echo ""
 
-while [[ $(curl -Is ${URL}/healthcheck | head -n 1) != *"200"* ]]; do
+while STATUS=$(curl -Is http://192.168.99.109:31151/healthcheck | head -n 1) && [[ "$STATUS" != *"200"* ]]; do
+    echo "$STATUS"
     echo "${URL}/healthcheck is not returning 200... reattempting to retry in 3 seconds..."
     sleep 3s
 done
