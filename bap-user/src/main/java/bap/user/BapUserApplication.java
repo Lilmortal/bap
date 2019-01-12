@@ -32,11 +32,13 @@ public class BapUserApplication {
         Properties prop = new Properties();
         InputStream input = null;
         try {
+//            LOG.info(System.getenv().toString());
             InputStream file = getClass().getResourceAsStream(USER_DB_PROPERTIES);
 
             prop.load(file);
             userDao = new UserDaoImpl(prop.getProperty(USER_DB_URL_KEY), prop.getProperty(USER_DB_USER_KEY), prop.getProperty(USER_DB_PASSWORD_KEY));
         } catch (SQLException e) {
+            LOG.info("ENV: ");
             LOG.error("Failed to connect to database. SQL State: " + e.getSQLState());
         } catch (FileNotFoundException e) {
             LOG.error("User database properties file not found.");
