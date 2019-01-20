@@ -3,6 +3,7 @@ package bap.user.dao;
 import java.util.Optional;
 
 public class User {
+    // TODO: Make this a UUID
     private String id;
 
     private String dotaId;
