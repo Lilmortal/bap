@@ -7,7 +7,7 @@ echo "---------------"
 echo "$MINIKUBE_STATUS"
 echo ""
 
-if [[ $MINIKUBE_STATUS == *"Error"* ]] || [[ $MINIKUBE_STATUS == *"Stopped"* ]]; then
+if [[ $MINIKUBE_STATUS == *"Error"* ]] || [[ $MINIKUBE_STATUS == *"Stopped"* ]] || [[ $MINIKUBE_STATUS != *"Running"* ]]; then
     echo "There seems to be an issue with minikube or it is not currently running. Attempting to start minikube..."
     echo ""
     minikube stop
