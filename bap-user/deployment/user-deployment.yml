@@ -6,14 +6,17 @@ kind: Deployment
 metadata:
   # The name of this deployment
   name: user-deployment
+  labels:
+    app: user
 spec:
   # Replicate 3 pods
   replicas: 3
   selector:
     matchLabels:
-      # match all the pods that have this name (metadata.labels.app)
+      # match all the pods that have this name (metadata.labels.app) in pod template (or alternatively in
+      # (template.metadata.labels.app)
       app: user-service
-  # Anything in template field is relative to the pods.
+  # Anything in template field is relative to the pods. Think of this as equivalent to a pod template.
   template:
     metadata:
       labels:
