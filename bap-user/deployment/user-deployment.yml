@@ -23,7 +23,7 @@ spec:
       containers:
       # Container name
       - name: user-service
-        image: "user_service:1.2"
+        image: "user_service:latest"
         imagePullPolicy: "Always"
         ports:
           - name: user
