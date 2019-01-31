@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Exit immediately if a command exits with a non-zero status. But seems like we don't even need this.
+set -e
+
 MINIKUBE_STATUS=$(minikube status)
 
 echo "Minikube Status"
@@ -7,7 +10,7 @@ echo "---------------"
 echo "$MINIKUBE_STATUS"
 echo ""
 
-if [[ $MINIKUBE_STATUS == *"Error"* ]] || [[ $MINIKUBE_STATUS == *"Stopped"* ]]; then
+if [[ $MINIKUBE_STATUS == *"Error"* ]] || [[ $MINIKUBE_STATUS == *"Stopped"* ]] || [[ $MINIKUBE_STATUS != *"Running"* ]]; then
     echo "There seems to be an issue with minikube or it is not currently running. Attempting to start minikube..."
     echo ""
     minikube stop
@@ -20,27 +23,27 @@ docker-compose up -d --build
 echo ""
 
 echo "Replacing user-deployment..."
-kubectl apply -f --force user-deployment.yml
+kubectl apply --force -f user-deployment.yml
 echo ""
 
 echo "Replacing user-db-deployment..."
-kubectl apply -f --force user-db-deployment.yml
+kubectl apply --force -f user-db-deployment.yml
 echo ""
 
 echo "Replacing user-db-config-map..."
-kubectl apply -f --force user-db-config-map.yml
+kubectl apply --force -f user-db-config-map.yml
 echo ""
 
 echo "Replacing user-service..."
-kubectl apply -f --force user-service.yml
+kubectl apply --force -f user-service.yml
 echo ""
 
 echo "Replacing user-db-service..."
-kubectl apply -f --force user-db-service.yml
+kubectl apply --force -f user-db-service.yml
 echo ""
 
 echo "Replacing user-db-volume-claim..."
-kubectl apply -f --force user-db-volume-claim.yml
+kubectl apply --force -f user-db-volume-claim.yml
 echo ""
 
 echo "Deployment"
@@ -68,6 +71,21 @@ RETRIES_MS=10
 while STATUS=$(curl -Is ${URL}/healthcheck | head -n 1) && [[ "$STATUS" != *"200"* ]]; do
     # Seems like ${STATUS} returns nothing
 #    echo "${STATUS}"
+
+    PODS_STATUS=$(kubectl get pods)
+
+    if [[ $PODS_STATUS == *"ImagePullBackOff"* ]] || [[ $PODS_STATUS == *"ErrImagePull"* ]]; then
+        echo "There seems to be an error creating an image."
+        echo ""
+        # TODO: Only describe pods that failed, not all of them
+        kubectl describe pod
+        echo ""
+        echo "Exiting..."
+        echo ""
+
+        exit 1
+    fi
+
     echo "${URL}/healthcheck is not returning 200... reattempting to retry in ${RETRIES_MS} seconds..."
     sleep "${RETRIES_MS}s"
 done
